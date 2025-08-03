@@ -26,20 +26,3 @@ class Teacher extends Authenticatable
         'password'
     ];
 }
-{
-    use HasFactory, Notifiable;
-
-    protected $fillable = [
-        'name',
-        'image',
-        'email',
-        'phone',
-        'address',
-        'password',
-        'subject',
-    ];
-
-    protected $hidden = [
-        'password'
-    ];
-}
