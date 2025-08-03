@@ -12,7 +12,55 @@ The project implements all the requirements specified in the interview task:
 4.  **Student Data Management:** Functionality to import bulk student data from a CSV/Excel file and export all student data to an Excel file is implemented.
 5.  **Custom Artisan Command:** A custom command `reminders:exam` is created to send Markdown email reminders to all students about an upcoming exam.
 
-## Getting Started
+
+## Docker instruction
+## Getting Started with Docker
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### Quick Start
+
+#### 1. Build and Run Containers
+
+From the project root, run the following command to build and start all necessary services:
+
+```bash
+docker-compose up -d --build
+```
+
+#### 2. Initial Setup
+
+Prepare the application by running these commands:
+
+```bash
+# Generate application key
+docker-compose exec app php artisan key:generate
+
+# Run migrations and seed the database with students and admins
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+### Usage & Testing
+
+- **Application URL:** [http://localhost:8080](http://localhost:8080)
+- **Mailpit Web UI:** [http://localhost:8025](http://localhost:8025) (View all sent emails here)
+
+You can test the API endpoints using a tool like [Postman](https://www.postman.com/).  
+The default password for all seeded users is `password`.
+
+#### Running the Email Reminder Command
+
+To send exam reminder emails, run:
+
+```bash
+docker-compose exec app php artisan reminders:exam "2025-08-15" "Exam Topic Reminder"
+```
+
+
+## Local Instruction
 
 ### Prerequisites
 
