@@ -1,66 +1,93 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# School Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a Laravel-based School Management System API
 
-## About Laravel
+## Features Implemented
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The project implements all the requirements specified in the interview task:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1.  **Multi-Guard Authentication:** Secure API endpoints are provided for both `students` and `admins` using Laravel Sanctum.
+2.  **Student & Teacher Management:** Models, migrations, and factories are created for `Student` and `Teacher` entities, with seeded data for testing.
+3.  **API Endpoints:** A RESTful API is available for user authentication, including `login`, `logout`, and fetching the authenticated user's details.
+4.  **Student Data Management:** Functionality to import bulk student data from a CSV/Excel file and export all student data to an Excel file is implemented.
+5.  **Custom Artisan Command:** A custom command `reminders:exam` is created to send Markdown email reminders to all students about an upcoming exam.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Getting Started
 
-## Learning Laravel
+### Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   PHP >= 8.1
+-   Composer
+-   MySQL or another database server
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Installation
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/tanvirprince/student-management-api.git
+    cd student-management-api
+    ```
 
-## Laravel Sponsors
+2.  **Install PHP dependencies:**
+    ```bash
+    composer install
+    ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3.  **Configure the environment file:**
+    Duplicate the `.env.example` file and rename it to `.env`.
+    ```bash
+    cp .env.example .env
+    ```
+    Update the database credentials and mail settings in your `.env` file. For local development, it is recommended to use the `log` driver for emails.
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=school_management
+    DB_USERNAME=root
+    DB_PASSWORD=
 
-### Premium Partners
+    # just for testing
+    MAIL_MAILER=log
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+4.  **Generate the application key:**
+    ```bash
+    php artisan key:generate
+    ```
 
-## Contributing
+5.  **Run migrations and seed the database:**
+    This command will create the necessary tables and populate them with 200 student and 20 admin records.
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Usage
 
-## Code of Conduct
+### API Endpoints
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+-   **Login:** `POST /api/login`
+    -   Body: `{ "email": "...", "password": "...", "guard": "admin" }` or `{ "guard": "student" }`
+-   **Logout:** `POST /api/logout` (requires `Authorization: Bearer <token>`)
+-   **Fetch User:** `GET /api/user` (requires `Authorization: Bearer <token>`)
 
-## Security Vulnerabilities
+### Artisan Commands
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+-   **Send Exam Reminders:**
+    To send the reminder email for the upcoming exam:
+    ```bash
+    php artisan reminders:exam "2025-08-15" "Exam Topic Reminder"
+    ```
+    > **Note:** The emails will be logged to `storage/logs/laravel.log` if you are using the `log` mail driver. or you can use gmail, mail trap
 
-## License
+### Student Data Management
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   **Export Students:**
+    A GET request to `/students/export` will trigger the download of an `xlsx` file with all student data.
+-   **Import Students:**
+    A POST request to `/students/import` with a file (`csv` or `xlsx`) will import new student records.
+
+
+---
+
+_This project was created as a submission for the Laravel Developer interview task._
